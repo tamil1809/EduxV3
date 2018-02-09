@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import clone from 'clone';
 import { Link } from 'react-router-dom';
@@ -135,7 +135,17 @@ class Sidebar extends Component {
               selectedKeys={app.current}
               onOpenChange={this.onOpenChange}
               className="isoDashboardMenu"
-            >
+                    >
+                        <Menu.Item key="mailbox">
+                            <Link to={`${url}/ogrenci-gorusmeleri`}>
+                                <span className="isoMenuHolder" style={submenuColor}>
+                                    <i className="ion-android-mail" />
+                                    <span className="nav-text">
+                                        Öğrenci Görüşmeleri
+                                    </span>
+                                </span>
+                            </Link>
+                        </Menu.Item>
               <Menu.Item key="mailbox">
                 <Link to={`${url}/mailbox`}>
                   <span className="isoMenuHolder" style={submenuColor}>
