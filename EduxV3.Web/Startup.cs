@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using React.AspNet;
 
 namespace EduxV3.Web
 {
@@ -26,7 +27,10 @@ namespace EduxV3.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddMvc();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,15 +40,13 @@ namespace EduxV3.Web
             {
                 app.UseDeveloperExceptionPage();
             }
-            var path = Path.Combine(env.ContentRootPath, "build"); // this allows for serving up contents in a folder named 'static'
-            var provider = new PhysicalFileProvider(path);
 
-            var options = new StaticFileOptions();
-            options.RequestPath = ""; // an empty string will give the *appearance* of it being served up from the root
-                                      //options.RequestPath = "/content"; // this will use the URL path named content, but could be any made-up name you want
-            options.FileProvider = provider;
-
-            app.UseStaticFiles(options);
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+            Path.Combine(Directory.GetCurrentDirectory(), "build")),
+                RequestPath = ""
+            });
             app.UseMvc(routes =>
             {
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
